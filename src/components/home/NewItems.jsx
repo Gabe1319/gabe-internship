@@ -1,9 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import OwlCarousel from "react-owl-carousel";
 
 const NewItems = () => {
   const [newItems, setNewitems] = useState([]);
+  const options = {
+    loop: true,
+    margin: 10,
+    nav: true,
+    responsive: {
+      
+      0: {
+        items: 1,
+      },
+      600: {
+        items: 2,
+      },
+      900: {
+        items: 3,
+      },
+      1200: {
+        items: 4,
+      },
+    },
+  };
+  
 
   useEffect(() => {
     async function fetchNewItems() {
@@ -12,6 +34,7 @@ const NewItems = () => {
       );
       setNewitems(data);
     }
+    
     fetchNewItems();
   }, []);
   return (
@@ -24,11 +47,15 @@ const NewItems = () => {
               <div className="small-border bg-color-2"></div>
             </div>
           </div>
-          {newItems.slice(0, 7).map((items, index) => (
-            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12" key={index}>
-              <div className="nft__item">
-                <div className="author_list_pp">
-                  <Link
+          <OwlCarousel
+            className="owl-carousel owl-theme"
+            {...options}
+          >
+            {newItems.slice(0, 7).map((items, index) => (
+              <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12" key={index}>
+                <div className="nft__item">
+                  <div className="author_list_pp">
+                    <Link
                     to={`/author/${items.authorId}`}
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
@@ -79,7 +106,7 @@ const NewItems = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))}</OwlCarousel>
         </div>
       </div>
     </section>
