@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import OwlCarousel from "react-owl-carousel";
 import Skeleton from "../UI/Skeleton";
+import Countdown from "../UI/Countdown";
 
 const NewItems = () => {
   const [newItems, setNewitems] = useState([]);
@@ -58,7 +59,7 @@ const NewItems = () => {
             </div>
           </div>
           {visibleItems.length ? (
-            <OwlCarousel className="owl-carousel owl-theme" {...options}>
+            <OwlCarousel key={carouselKey} className="owl-carousel owl-theme" {...options}>
               {visibleItems.map((items, index) => (
                 <div className="item" key={index}>
                   <div className="nft__item">
@@ -73,7 +74,7 @@ const NewItems = () => {
                         <i className="fa fa-check"></i>
                       </Link>
                     </div>
-                    <div className="de_countdown">5h 30m 32s</div>
+                    <Countdown expiryDate={items.expiryDate} />
 
                     <div className="nft__item_wrap">
                       <div className="nft__item_extra">
