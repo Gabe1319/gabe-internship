@@ -26,15 +26,26 @@ const NewItems = () => {
     },
   };
   
+  const visibleItems = newItems.slice(0, 7);
+  const carouselKey = visibleItems.map((_, index) => index).join("-"); 
+  
 
   useEffect(() => {
+    let isMounted = true;
     async function fetchNewItems() {
-      const { data } = await axios.get(
-        `https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems`,
-      );
-      setNewitems(data);
+      try {
+        const { data } = await axios.get(
+          `https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems`,
+        );
+        if (isMounted) {
+          setNewitems(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setNewitems([]);
+        }
+      }
     }
-    
     fetchNewItems();
   }, []);
   return (
@@ -47,11 +58,11 @@ const NewItems = () => {
               <div className="small-border bg-color-2"></div>
             </div>
           </div>
-          <OwlCarousel
+          <OwlCarousel key={carouselKey}
             className="owl-carousel owl-theme"
             {...options}
           >
-            {newItems.slice(0, 7).map((items, index) => (
+            {visibleItems.map((items, index) => (
               <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12" key={index}>
                 <div className="nft__item">
                   <div className="author_list_pp">
