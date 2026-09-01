@@ -119,12 +119,12 @@ const NewItems = () => {
           ) : (
             <>
               <OwlCarousel className="owl-carousel owl-theme" {...options}>
-                {visibleItems.map((items, index) => (
+                {new Array(4).fill(0).map((_, index) => (
                   <div className="item" key={index}>
                     <div className="nft__item">
                       <div className="author_list_pp">
                         <Link
-                          to={`/author/${items.authorId}`}
+                          to={``}
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
                           title="Creator: Monica Lucas"
