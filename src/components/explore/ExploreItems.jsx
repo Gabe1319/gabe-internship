@@ -8,10 +8,10 @@ const ExploreItems = () => {
   const [exploreItems, setExploreItems] = useState([]);
 
   useEffect(() => {
-    const fetchExploreItems = async () => {
-      const { data } = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/exploreItems`);
+    async function fetchExploreItems() {
+      const { data } = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/explore`);
       setExploreItems(data);
-    };
+    }
     fetchExploreItems();
   }, []);
 
@@ -69,7 +69,7 @@ const ExploreItems = () => {
               </div>
               <div className="nft__item_info">
                 <Link to="/item-details">
-                  <h4>Pinky Ocean</h4>
+                  <h4>{item.title}</h4>
                 </Link>
                 <div className="nft__item_price">1.74 ETH</div>
                 <div className="nft__item_like">
