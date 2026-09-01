@@ -14,12 +14,12 @@ const ExploreItems = () => {
     setExploreItems(data);}
 
     async function filterItems(filter) {
-      setSkeletonLoading(false);
+      setSkeletonLoading(true);
     const { data } = await axios.get(
       `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${filter}`,
     );
     setExploreItems(data);
-    setSkeletonLoading(true);
+    setSkeletonLoading(false);
   }
 
   useEffect(() => {
@@ -75,13 +75,13 @@ const ExploreItems = () => {
                       </div>
                     </div>
                   </div>
-                  <Link to={`/item-details/${item.id}`}>
-                    <img src={item.image} className="lazy nft__item_preview" alt="" />
+                  <Link to={`/item-details/${item.nftid}`}>
+                    <img src={item.nftImage} className="lazy nft__item_preview" alt="" />
                   </Link>
                 </div>
                 <div className="nft__item_info">
-                  <Link to={`/item-details/${item.id}`}>
-                    <h4>{item.name}</h4>
+                  <Link to={`/item-details/${item.nftid}`}>
+                    <h4>{item.title}</h4>
                   </Link>
                   <div className="nft__item_price">{item.price} ETH</div>
                   <div className="nft__item_like">
@@ -116,6 +116,7 @@ const ExploreItems = () => {
             </div>
           ))}
         </>
+
       )}
     </>
   );
