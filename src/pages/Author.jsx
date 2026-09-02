@@ -7,17 +7,22 @@ import Skeleton from "../components/UI/Skeleton";
 import axios from "axios";
 
 const Author = () => {
-  const [authordata, setAuthordata] = useState({});
+  const [authordata, setAuthordata] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
     async function fetchAuthor() {
-      const { data } = await axios.get(
-        `https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${id}`,
-      );
+      try {
+        const { data } = await axios.get(
+          `https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${id}`,
+        );
 
-      setAuthordata(data);
+        setAuthordata(data);
+      } catch (error) {
+        console.error("Failed to fetch author data:", error);
+        setAuthordata(null);
+      }
     }
 
     fetchAuthor();
@@ -32,8 +37,11 @@ const Author = () => {
           id="profile_banner"
           aria-label="section"
           className="text-light"
-          data-bgimage="url(images/author_banner.jpg) top"
-          style={{ background: `url(${authordata.authorBanner}) top` }}
+          data-bgimage="url(images/author_banner.jpg)"
+          style={{
+            background: `url(${authordata?.nftCollection?.[0]?.nftImage || "images/author_banner.jpg"}) center top`,
+            backgroundRepeat: "no-repeat",
+          }}
         ></section>
 
         <section aria-label="section">
@@ -43,7 +51,7 @@ const Author = () => {
                 <div className="d_profile de-flex">
                   <div className="de-flex-col">
                     <div className="profile_avatar">
-                      {authordata.authorImage ? (
+                      {authordata?.authorImage ? (
                         <img src={authordata.authorImage} alt="" />
                       ) : (
                         <Skeleton
@@ -56,29 +64,32 @@ const Author = () => {
                       <i className="fa fa-check"></i>
                       <div className="profile_name">
                         {authordata ? (
-                        <h4>
-                          {authordata.authorName}
-                          <span className="profile_username">
-                            @{authordata.tag}
-                          </span>
-                          <span id="wallet" className="profile_wallet">
-                            {authordata.address}
-                          </span>
-                          <button id="btn_copy" title="Copy Text">
-                            Copy
-                          </button>
-                        </h4>) : (<h4>
-                          <Skeleton width="200px" />
-                          <span className="profile_username">
-                            <Skeleton width="100px" />
-                          </span>
-                          <span id="wallet" className="profile_wallet">
-                            <Skeleton width="250px" />
-                          </span>
-                          <button id="btn_copy" title="Copy Text">
-                            Copy
-                          </button>
-                        </h4>)}
+                          <h4>
+                            {authordata.authorName}
+                            <span className="profile_username">
+                              @{authordata.tag}
+                            </span>
+                            <span id="wallet" className="profile_wallet">
+                              {authordata.address}
+                            </span>
+                            <button id="btn_copy" title="Copy Text">
+                              Copy
+                            </button>
+                          </h4>
+                        ) : (
+                          <h4>
+                            <Skeleton width="200px" />
+                            <span className="profile_username">
+                              <Skeleton width="100px" />
+                            </span>
+                            <span id="wallet" className="profile_wallet">
+                              <Skeleton width="250px" />
+                            </span>
+                            <button id="btn_copy" title="Copy Text">
+                              Copy
+                            </button>
+                          </h4>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -109,9 +120,11 @@ const Author = () => {
                           )}
                         </>
                       ) : (
-                        <div className="profile_follower">
-                          <Skeleton width="150px" height="40px" />
-                        </div>
+                        <>
+                          <div className="profile_follower">
+                            <Skeleton width="150px" height="40px" />
+                          </div>
+                        </>
                       )}
                     </div>
                   </div>
