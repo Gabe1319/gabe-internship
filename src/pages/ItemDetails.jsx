@@ -18,7 +18,7 @@ const ItemDetails = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     getNftItem();
-  }, []);
+  }, [id]);
 
   return (
     <div id="wrapper">
