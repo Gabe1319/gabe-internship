@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
-import AuthorBanner from "../images/author_banner.jpg";
+
 import AuthorItems from "../components/author/AuthorItems";
 import { Link, useParams } from "react-router-dom";
-import AuthorImage from "../images/author_thumbnail.jpg";
+
 import axios from "axios";
 
 const Author = () => {
-  const [authordata,setAuthordata] = useState({});
-  const {id} = useParams();
+  const [authordata, setAuthordata] = useState({});
+  const { id } = useParams();
 
   useEffect(() => {
-  async function fetchAuthor() {
-    const {data} = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/author?id=${id}`);
-     setAuthordata(data);
-  }
+    async function fetchAuthor() {
+      const { data } = await axios.get(
+        `https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${id}`,
+      );
+     
+      setAuthordata(data);
+    }
 
-  
     fetchAuthor();
   }, [id]);
 
@@ -60,7 +62,7 @@ const Author = () => {
                   </div>
                   <div className="profile_follow de-flex">
                     <div className="de-flex-col">
-                      <div className="profile_follower">573 followers</div>
+                      <div className="profile_follower">{authordata.followers} Followers</div>
                       <Link to="#" className="btn-main">
                         Follow
                       </Link>
@@ -71,7 +73,7 @@ const Author = () => {
 
               <div className="col-md-12">
                 <div className="de_tab tab_simple">
-                  <AuthorItems author={authordata.authordata} />
+                  <AuthorItems author={authordata}/>
                 </div>
               </div>
             </div>
