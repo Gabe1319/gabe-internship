@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Countdown from "../UI/Countdown";
+import Skeleton from "../UI/Skeleton";
 
 const ExploreItems = () => {
   const [itemCount, setItemCount] = useState(8);
@@ -10,7 +11,9 @@ const ExploreItems = () => {
   useEffect(() => {
     async function fetchExploreItems() {
       const { data } = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/explore`);
-      setExploreItems(data);
+      setTimeout(() => {
+        setExploreItems(data);
+      }, 3000);
     }
     fetchExploreItems();
   }, []);
@@ -45,7 +48,7 @@ const ExploreItems = () => {
               </div>
               <Countdown expiryDate={item.expiryDate} />
 
-                  <div className="nft__item_wrap">
+              <div className="nft__item_wrap">
                 <div className="nft__item_extra">
                   <div className="nft__item_buttons">
                     <button>Buy Now</button>
@@ -71,7 +74,7 @@ const ExploreItems = () => {
                 <Link to="/item-details">
                   <h4>{item.title}</h4>
                 </Link>
-                <div className="nft__item_price">1.74 ETH</div>
+                <div className="nft__item_price">{item.price} ETH</div>
                 <div className="nft__item_like">
                   <i className="fa fa-heart"></i>
                   <span>[{item.likes}]</span>
@@ -80,9 +83,23 @@ const ExploreItems = () => {
             </div>
           </div>
         ))
-      ) : null}
+      ) : (
+        <>
+          {new Array(8).fill(0).map((_, index) => (
+            <div
+              key={index}
+              className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
+            >
+              <Skeleton width="100%" height="400px" />
+            </div>
+          ))}
+        </>
+      )}
+
       <div className="col-md-12 text-center">
-        <Link to="" id="loadmore" className="btn-main lead">
+        <Link 
+        onClick={() => setItemCount(itemCount + 4)}
+        to="" id="loadmore" className="btn-main lead">
           Load more
         </Link>
       </div>
