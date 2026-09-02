@@ -12,8 +12,7 @@ const Author = () => {
   useEffect(() => {
   async function fetchAuthor() {
     const {data} = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/author?id=${id}`);
-    console.log(data);
-    setAuthordata(data);
+     setAuthordata(data);
   }
 
   
@@ -30,7 +29,7 @@ const Author = () => {
           aria-label="section"
           className="text-light"
           data-bgimage="url(images/author_banner.jpg) top"
-          style={{ background: `url(${AuthorBanner}) top` }}
+          style={{ background: `url(${authordata.authorBanner}) top` }}
         ></section>
 
         <section aria-label="section">
@@ -40,7 +39,7 @@ const Author = () => {
                 <div className="d_profile de-flex">
                   <div className="de-flex-col">
                     <div className="profile_avatar">
-                      <img src={AuthorImage} alt="" />
+                      <img src={authordata.authorImage} alt="" />
 
                       <i className="fa fa-check"></i>
                       <div className="profile_name">
@@ -72,7 +71,7 @@ const Author = () => {
 
               <div className="col-md-12">
                 <div className="de_tab tab_simple">
-                  <AuthorItems />
+                  <AuthorItems author={authordata.authordata} />
                 </div>
               </div>
             </div>
