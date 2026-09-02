@@ -8,7 +8,6 @@ const ExploreItems = () => {
   const [itemCount, setItemCount] = useState(8);
   const [exploreItems, setExploreItems] = useState([]);
   const [skeletonLoading, setSkeletonLoading] = useState(true);
-  
 
   async function fetchFilterItems(filter) {
     setSkeletonLoading(true);
@@ -25,7 +24,8 @@ const ExploreItems = () => {
         `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore`,
       );
       setExploreItems(data);
-      setSkeletonLoading(false);}
+      setSkeletonLoading(false);
+    }
     fetchExploreItems();
   }, []);
 
@@ -43,7 +43,8 @@ const ExploreItems = () => {
           <option value="likes_high_to_low">Most liked</option>
         </select>
       </div>
-      {skeletonLoading ? (<>
+      {skeletonLoading ? (
+        <>
           {new Array(8).fill(0).map((_, index) => (
             <div
               key={index}
@@ -53,7 +54,8 @@ const ExploreItems = () => {
               <Skeleton width="100%" height="400px" />
             </div>
           ))}
-        </>) : (
+        </>
+      ) : (
         exploreItems.slice(0, itemCount).map((item, index) => (
           <div
             key={index}
@@ -63,7 +65,7 @@ const ExploreItems = () => {
             <div className="nft__item">
               <div className="author_list_pp">
                 <Link
-                  to="/author"
+                  to={`/author/${item.authorId}`}
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                 >
@@ -100,7 +102,7 @@ const ExploreItems = () => {
                 </Link>
               </div>
               <div className="nft__item_info">
-                <Link to="/item-details">
+                <Link to={`/item-details/${item.nftId}`}>
                   <h4>{item.title}</h4>
                 </Link>
                 <div className="nft__item_price">{item.price} ETH</div>
@@ -118,7 +120,8 @@ const ExploreItems = () => {
           onClick={() => setItemCount(itemCount + 4)}
           to=""
           id="loadmore"
-          className="btn-main lead"
+          className="btn-main"
+          data-aos="fade-in-up-lead"
         >
           Load more
         </Link>
