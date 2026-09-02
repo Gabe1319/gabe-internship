@@ -8,7 +8,7 @@ const ExploreItems = () => {
   const [itemCount, setItemCount] = useState(8);
   const [exploreItems, setExploreItems] = useState([]);
   const [skeletonLoading, setSkeletonLoading] = useState(true);
-  const [filteredItems, setFilteredItems] = useState([]);
+  
 
   async function fetchFilterItems(filter) {
     setSkeletonLoading(true);
@@ -35,7 +35,7 @@ const ExploreItems = () => {
         <select
           id="filter-items"
           defaultValue=""
-          onChange={(event) => filteredItems(event.target.value)}
+          onChange={(event) => fetchFilterItems(event.target.value)}
         >
           <option value="">Default</option>
           <option value="price_low_to_high">Price, Low to High</option>
@@ -43,7 +43,7 @@ const ExploreItems = () => {
           <option value="likes_high_to_low">Most liked</option>
         </select>
       </div>
-      {exploreItems.length ? (
+      {exploreItems.length && skeletonLoading ? (
         exploreItems.slice(0, itemCount).map((item, index) => (
           <div
             key={index}
