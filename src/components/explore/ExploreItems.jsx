@@ -7,13 +7,24 @@ import Skeleton from "../UI/Skeleton";
 const ExploreItems = () => {
   const [itemCount, setItemCount] = useState(8);
   const [exploreItems, setExploreItems] = useState([]);
+  const [skeletonLoading, setSkeletonLoading] = useState(true);
+  const [filteredItems, setFilteredItems] = useState([]);
+
+  async function fetchFilterItems(filter) {
+    setSkeletonLoading(true);
+    const { data } = await axios.get(
+      `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${filter}`,
+    );
+    setExploreItems(data);
+    setSkeletonLoading(false);
+  }
 
   useEffect(() => {
     async function fetchExploreItems() {
-      const { data } = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/explore`);
-      setTimeout(() => {
-        setExploreItems(data);
-      }, 3000);
+      const { data } = await axios.get(
+        `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore`,
+      );
+      setExploreItems(data);
     }
     fetchExploreItems();
   }, []);
@@ -21,7 +32,11 @@ const ExploreItems = () => {
   return (
     <>
       <div>
-        <select id="filter-items" defaultValue="">
+        <select
+          id="filter-items"
+          defaultValue=""
+          onChange={(event) => filteredItems(event.target.value)}
+        >
           <option value="">Default</option>
           <option value="price_low_to_high">Price, Low to High</option>
           <option value="price_high_to_low">Price, High to Low</option>
@@ -29,7 +44,7 @@ const ExploreItems = () => {
         </select>
       </div>
       {exploreItems.length ? (
-        exploreItems.slice(0,itemCount).map((item, index) => (
+        exploreItems.slice(0, itemCount).map((item, index) => (
           <div
             key={index}
             className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
@@ -67,7 +82,11 @@ const ExploreItems = () => {
                   </div>
                 </div>
                 <Link to="/item-details">
-                  <img src={item.nftImage} className="lazy nft__item_preview" alt="" />
+                  <img
+                    src={item.nftImage}
+                    className="lazy nft__item_preview"
+                    alt=""
+                  />
                 </Link>
               </div>
               <div className="nft__item_info">
@@ -89,6 +108,7 @@ const ExploreItems = () => {
             <div
               key={index}
               className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
+              style={{ display: "block", backgroundSize: "cover" }}
             >
               <Skeleton width="100%" height="400px" />
             </div>
@@ -97,9 +117,12 @@ const ExploreItems = () => {
       )}
 
       <div className="col-md-12 text-center">
-        <Link 
-        onClick={() => setItemCount(itemCount + 4)}
-        to="" id="loadmore" className="btn-main lead">
+        <Link
+          onClick={() => setItemCount(itemCount + 4)}
+          to=""
+          id="loadmore"
+          className="btn-main lead"
+        >
           Load more
         </Link>
       </div>
