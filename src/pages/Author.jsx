@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AuthorBanner from "../images/author_banner.jpg";
 import AuthorItems from "../components/author/AuthorItems";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AuthorImage from "../images/author_thumbnail.jpg";
+import axios from "axios";
 
 const Author = () => {
+  const [authordata,setAuthordata] = useState({});
+  const {id} = useParams();
+
+  useEffect(() => {
+  async function fetchAuthor() {
+    const {data} = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/author?id=${id}`);
+    console.log(data);
+    setAuthordata(data);
+  }
+
+  
+    fetchAuthor();
+  }, [id]);
+
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
@@ -30,10 +45,12 @@ const Author = () => {
                       <i className="fa fa-check"></i>
                       <div className="profile_name">
                         <h4>
-                          Monica Lucas
-                          <span className="profile_username">@monicaaaa</span>
+                          {authordata.authorName}
+                          <span className="profile_username">
+                            @{authordata.tag}
+                          </span>
                           <span id="wallet" className="profile_wallet">
-                            UDHUHWudhwd78wdt7edb32uidbwyuidhg7wUHIFUHWewiqdj87dy7
+                            {authordata.address}
                           </span>
                           <button id="btn_copy" title="Copy Text">
                             Copy
